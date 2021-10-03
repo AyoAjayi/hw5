@@ -29,6 +29,13 @@ public class Server {
         return DaoManager.createDao(connectionSource, Employer.class);
     }
 
+    private static Dao getJobORMLiteDao() throws SQLException {
+        final String URI = "jdbc:sqlite:./JBApp.db";
+        ConnectionSource connectionSource = new JdbcConnectionSource(URI);
+        TableUtils.createTableIfNotExists(connectionSource, Job.class);
+        return DaoManager.createDao(connectionSource, Job.class);
+    }
+
     public static void main(String[] args) {
 
         final int PORT_NUM = 7000;
@@ -58,6 +65,13 @@ public class Server {
             return new ModelAndView(model, "public/employers.vm");
         }, new VelocityTemplateEngine());
 
+        Spark.get("/jobs", (req, res) -> {
+            List<Job> ls = getJobORMLiteDao().queryForAll();
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("jobs", ls);
+            return new ModelAndView(model, "public/jobs.vm");
+        }, new VelocityTemplateEngine());
+
         Spark.post("/employers", (req, res) -> {
             String name = req.queryParams("name");
             String sector = req.queryParams("sector");
@@ -73,6 +87,8 @@ public class Server {
             Map<String, Object> model = new HashMap<String, Object>();
             return new ModelAndView(model, "public/addemployers.vm");
         }, new VelocityTemplateEngine());
+
+
 
     }
 }

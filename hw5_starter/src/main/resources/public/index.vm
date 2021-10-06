@@ -2,7 +2,7 @@
 #parse("public/top.vm")
 
 #if($username)
-<h2>Welcome to JBApp <i>$username</i></h2>
+<h2>Welcome to JBApp <i style="color:$color;">$username</i></h2>
 <div>
     <p><a href="/employers">Show all employers</a></p>
     <p><a href="/addemployers">Add an employer</a></p>
@@ -10,12 +10,21 @@
     <p><a href="/addjobs">Add a job</a></p>
 </div>
 #else
-<h1>Please provide a username!</h1>
+<h1>Please provide a username and color!</h1>
 <form action="/" method="post">
     <fieldset>
         <div>
             <label for="username">Username: </label>
             <input type="text" placeholder="username" name="username"/>
+        </div>
+        <br/>
+        <div>
+            <label for="color">Color: </label>
+            <select name = "color">
+                <option value = "MediumSeaGreen" selected>Green</option>
+                <option value = "DodgerBlue">Blue</option>
+                <option value = "Tomato">Red</option>
+            </select>
         </div>
         <br/>
     <button>Sign in</button>

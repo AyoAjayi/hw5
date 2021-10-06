@@ -100,36 +100,34 @@ public class Server {
 
         Spark.post("/jobs", (req, res) -> {
             String title = req.queryParams("title");
-
-            String datePostedStr = req.queryParams("date-posted");
-            SimpleDateFormat datePostedSDF = new SimpleDateFormat(datePostedStr);
-            Date datePosted = datePostedSDF.parse(datePostedStr);
-
-            String deadlineStr = req.queryParams("deadline");
-            SimpleDateFormat deadlineSDF = new SimpleDateFormat(deadlineStr);
-            Date deadline = deadlineSDF.parse(deadlineStr);
-
+            Date datePosted = new SimpleDateFormat("yyyy-MM-dd").parse(req.queryParams("date-posted"));
+            Date deadline = new SimpleDateFormat("yyyy-MM-dd").parse(req.queryParams("deadline"));
             String domain = req.queryParams("domain");
-
             String location = req.queryParams("location");
-
             boolean fullTime = Boolean.parseBoolean(req.queryParams("full-time"));
-
             boolean salaryBased = Boolean.parseBoolean(req.queryParams("salary-based"));
-
             String requirements = req.queryParams("requirements");
-
             int payment = Integer.parseInt(req.queryParams("payment"));
-
-            String summary = req.queryParams("summary");
-
-            Employer employer = (Employer)getEmployerORMLiteDao().queryForId("employer");
-
+            Employer employer = (Employer) getEmployerORMLiteDao().queryForEq("name", req.queryParams("employer")).get(0);
+            System.out.println(employer.toString());
             Job jb = new Job(title, datePosted, deadline, domain, location, fullTime, salaryBased, requirements, payment, employer);
+
+            getJobORMLiteDao().create(jb);
 
             res.status(201);
             res.type("application/json");
             return new Gson().toJson(jb.toString());
         });
     }
+
+//    Spark.post("/employers", (req, res) -> {
+//        String name = req.queryParams("name");
+//        String sector = req.queryParams("sector");
+//        String summary = req.queryParams("summary");
+//        Employer em = new Employer(name, sector, summary);
+//        getEmployerORMLiteDao().create(em);
+//        res.status(201);
+//        res.type("application/json");
+//        return new Gson().toJson(em.toString());
+//    });
 }

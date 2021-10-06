@@ -15,7 +15,7 @@
             <label for="employer">Employer: </label>
             <select name="employer" id="employer">
                 #foreach($em in $employers )
-                    <option value=$em.name>$em.name</option>
+                    <option value=$em.id>$em.name</option>
                 #end
             </select>
 

@@ -96,36 +96,38 @@ public class Server {
             return new ModelAndView(model, "public/addjobs.vm");
         }, new VelocityTemplateEngine());
 
-//        Spark.post("/jobs", (req, res) -> {
-//            String title = req.queryParams("title");
-//
-//            String datePostedStr = req.queryParams("date-posted");
-//            SimpleDateFormat datePostedSDF = new SimpleDateFormat(datePostedStr);
-//            Date datePosted = datePostedSDF.parse(datePostedStr);
-//
-//            String deadlineStr = req.queryParams("deadline");
-//            SimpleDateFormat deadlineSDF = new SimpleDateFormat(deadlineStr);
-//            Date deadline = deadlineSDF.parse(deadlineStr);
-//
-//            String domain = req.queryParams("domain");
-//
-//            String location = req.queryParams("location");
-//
-//            boolean fullTime = Boolean.parseBoolean(req.queryParams("full-time"));
-//
-//            boolean salaryBased = Boolean.parseBoolean(req.queryParams("salary-based"));
-//
-//            String requirements = req.queryParams("requirements");
-//
-//            int payment = Integer.parseInt(req.queryParams("payment"));
-//
-//            String summary = req.queryParams("summary");
-//            Job jb = new Job(title, datePosted, deadline, domain, location, fullTime, salaryBased, requirements, payment);
-//            getEmployerORMLiteDao().create(jb);
-//            res.status(201);
-//            res.type("application/json");
-//            return new Gson().toJson(jb.toString());
-//        });
+        Spark.post("/jobs", (req, res) -> {
+            String title = req.queryParams("title");
 
+            String datePostedStr = req.queryParams("date-posted");
+            SimpleDateFormat datePostedSDF = new SimpleDateFormat(datePostedStr);
+            Date datePosted = datePostedSDF.parse(datePostedStr);
+
+            String deadlineStr = req.queryParams("deadline");
+            SimpleDateFormat deadlineSDF = new SimpleDateFormat(deadlineStr);
+            Date deadline = deadlineSDF.parse(deadlineStr);
+
+            String domain = req.queryParams("domain");
+
+            String location = req.queryParams("location");
+
+            boolean fullTime = Boolean.parseBoolean(req.queryParams("full-time"));
+
+            boolean salaryBased = Boolean.parseBoolean(req.queryParams("salary-based"));
+
+            String requirements = req.queryParams("requirements");
+
+            int payment = Integer.parseInt(req.queryParams("payment"));
+
+            String summary = req.queryParams("summary");
+
+            Employer employer = (Employer)getEmployerORMLiteDao().queryForId("employer");
+
+            Job jb = new Job(title, datePosted, deadline, domain, location, fullTime, salaryBased, requirements, payment, employer);
+
+            res.status(201);
+            res.type("application/json");
+            return new Gson().toJson(jb.toString());
+        });
     }
 }

@@ -5,7 +5,7 @@
     <h1>Add a new job</h1>
     <p>Add a job: </p>
     <fieldset>
-    <form action="/employers" method="post" >
+    <form action="/jobs" method="post" >
         <div>
             <label for="title">Title: </label>
             <input type="text" name="title" placeholder="Required" id="title" required>
@@ -15,7 +15,7 @@
             <label for="employer">Employer: </label>
             <select name="employer" id="employer">
                 #foreach($em in $employers )
-                    <option value=$em.name>$em.name</option>
+                    <option value=$em.id>$em.name</option>
                 #end
             </select>
 
@@ -44,16 +44,16 @@
         <div>
             <label for="full-time">Full Time: </label>
             <select name="full-time" id="full-time" />
-                <option value=True selected>Yes</option>
-                <option value=False>No</option>
+                <option value="true" selected>Yes</option>
+                <option value="false">No</option>
             </select>
         </div>
         <br>
         <div>
-            <label for="salary/hourly">Salary/Hourly: </label>
-            <select name="salary/hourly" id="salary/hourly">
-                <option value=True selected>Salary</option>
-                <option value=False>Hourly</option>
+            <label for="salary-based">Salary/Hourly: </label>
+            <select name="salary-based" id="salary-based">
+                <option value="true" selected>Salary</option>
+                <option value="false">Hourly</option>
             </select>
         </div>
         <br>

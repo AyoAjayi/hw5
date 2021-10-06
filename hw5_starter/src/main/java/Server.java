@@ -29,6 +29,7 @@ public class Server {
         return DaoManager.createDao(connectionSource, Employer.class);
     }
 
+
     private static Dao getJobORMLiteDao() throws SQLException {
         final String URI = "jdbc:sqlite:./JBApp.db";
         ConnectionSource connectionSource = new JdbcConnectionSource(URI);
@@ -88,7 +89,43 @@ public class Server {
             return new ModelAndView(model, "public/addemployers.vm");
         }, new VelocityTemplateEngine());
 
+        Spark.get("/addjobs", (req, res) -> {
+            List<Employer> ls = getEmployerORMLiteDao().queryForAll();
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("employers", ls);
+            return new ModelAndView(model, "public/addjobs.vm");
+        }, new VelocityTemplateEngine());
 
+//        Spark.post("/jobs", (req, res) -> {
+//            String title = req.queryParams("title");
+//
+//            String datePostedStr = req.queryParams("date-posted");
+//            SimpleDateFormat datePostedSDF = new SimpleDateFormat(datePostedStr);
+//            Date datePosted = datePostedSDF.parse(datePostedStr);
+//
+//            String deadlineStr = req.queryParams("deadline");
+//            SimpleDateFormat deadlineSDF = new SimpleDateFormat(deadlineStr);
+//            Date deadline = deadlineSDF.parse(deadlineStr);
+//
+//            String domain = req.queryParams("domain");
+//
+//            String location = req.queryParams("location");
+//
+//            boolean fullTime = Boolean.parseBoolean(req.queryParams("full-time"));
+//
+//            boolean salaryBased = Boolean.parseBoolean(req.queryParams("salary-based"));
+//
+//            String requirements = req.queryParams("requirements");
+//
+//            int payment = Integer.parseInt(req.queryParams("payment"));
+//
+//            String summary = req.queryParams("summary");
+//            Job jb = new Job(title, datePosted, deadline, domain, location, fullTime, salaryBased, requirements, payment);
+//            getEmployerORMLiteDao().create(jb);
+//            res.status(201);
+//            res.type("application/json");
+//            return new Gson().toJson(jb.toString());
+//        });
 
     }
 }

@@ -8,6 +8,7 @@
     <p><a href="/addemployers">Add an employer</a></p>
     <p><a href="/jobs">Show all jobs</a></p>
     <p><a href="/addjobs">Add a job</a></p>
+    <p><a href="/search">Search jobs</a></p>
 </div>
 #else
 <h1>Please provide a username and color!</h1>

@@ -1,4 +1,5 @@
 import com.google.gson.Gson;
+import com.google.gson.JsonParser;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.jdbc.JdbcConnectionSource;
@@ -15,10 +16,7 @@ import spark.template.velocity.VelocityTemplateEngine;
 
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Server {
 
@@ -118,16 +116,28 @@ public class Server {
             res.type("application/json");
             return new Gson().toJson(jb.toString());
         });
-    }
 
-//    Spark.post("/employers", (req, res) -> {
-//        String name = req.queryParams("name");
-//        String sector = req.queryParams("sector");
-//        String summary = req.queryParams("summary");
-//        Employer em = new Employer(name, sector, summary);
-//        getEmployerORMLiteDao().create(em);
-//        res.status(201);
-//        res.type("application/json");
-//        return new Gson().toJson(em.toString());
-//    });
+        Spark.get("/search", (req, res) -> {
+            List<Job> ls = getJobORMLiteDao().queryForAll();
+            Map<String, Object> model = new HashMap<String, Object>();
+            model.put("search", ls);
+            return new ModelAndView(model, "public/search.vm");
+        }, new VelocityTemplateEngine());
+
+        Spark.post("/search", (req, res) -> {
+            String keyword = req.queryParams("keyword");
+            List<Job> ls = getJobORMLiteDao().queryForAll();
+            System.out.println(ls);
+            List<Object> data = new ArrayList<Object>();
+            for (int i = 0; i < ls.size(); i++) {
+                Job current = ls.get(i);
+                if ((current.getTitle().toLowerCase()).contains(keyword.toLowerCase()) || (current.getDomain().toLowerCase()).contains(keyword.toLowerCase()) || (current.getEmployer().getName().toLowerCase()).contains(keyword.toLowerCase())){
+                    Job ret = new Job(current.getTitle(), current.getDatePosted(), current.getDeadline(), current.getDomain(), current.getLocation(), current.isFullTime(), current.isSalaryBased(), current.getRequirements(), current.getPayAmount(), current.getEmployer());
+                    //System.out.println(ret.toString());
+                    data.add(ret);
+                }
+            }
+            return new Gson().toJson(data);
+        });
+    }
 }

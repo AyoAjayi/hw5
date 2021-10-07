@@ -1,0 +1,19 @@
+#set( $title = "Search jobs" )
+#parse("public/top.vm")
+<body>
+<h1>Search jobs</h1>
+<p>Search jobs: </p>
+<fieldset>
+    <form action="/search" method="post" >
+        <div>
+            <label for="keyword">Company name, job title or domain: </label>
+            <input type="text" name="keyword" id="keyword" required>
+        </div>
+        <br>
+
+        <input type="submit" value="Search" id="submitSearch" />
+    </form>
+</fieldset>
+<div class="divContents">
+</div>
+#parse("public/bottom.vm")
